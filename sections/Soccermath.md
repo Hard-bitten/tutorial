@@ -1,16 +1,16 @@
 ```cpp
-/*!
-  \brief Calcula a taxa do chute
-  \param dist Distança do jogador para a bola
-  \param dir_diff Diferença entre o ângulo do jogador e da bola
-  \param kprate Taxa de força do chute do jogador
-  \param bsize Raio da bola
-  \param psize Raio do jogador
-  \param kmargin Margem da área chutável do jogador 
-  \return Taxa do efeito da força de chute
+/ *!
+   \ Brief Calculates the kick rate
+   \ Param dist Player's distances to the ball
+   \ Param dir_diff Difference between the angle of the player and the ball
+   \ Param kprate Player kicking force rating
+   \ Param bsize Ball radius
+   \ Param psize Player radius
+   \ Param kmargin Margin of player's kicking area
+   \ Return Kick force effect rate
 
-  Pode ser útil redefenir esse algoritmo no módulo do chute
-*/
+   It may be useful to redefine this algorithm in the kick module
+* /
 inline double kick_rate( const double & dist,
            const double & dir_diff,
            const double & kprate,

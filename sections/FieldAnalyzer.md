@@ -1,11 +1,11 @@
-Provavelmente, a classe mais importante para entender o funcionamento do agent2D. É ela que vai, literalmente, analisar o campo a partir do diagrama de Voronoi para então decidir que ação deve ser tomada pelo agente.
+Probably the most important class to understand the operation of agent2D. It is she who will literally analyze the field from the Voronoi diagram and then decide what action should be taken by the agent.
 
-Uma explicação bem simples do diagrama de Voronoi pode ser encontrada aqui: 
-http://www.ime.usp.br/~freitas/gc/voronoi.html
+A very simple explanation of the Voronoi diagram can be found here:
+Http://www.ime.usp.br/~freitas/gc/voronoi.html
 
-Para entender o funcionamento do código do diagrama de Voronoi da librcsc, veja a classe [Voronoi Diagram](https://github.com/RoboCup2D/tutorial/blob/master/sections/VoronoiDiagram.md).
+To understand the operation of the librcsc Voronoi diagram code, see the [Voronoi Diagram] class (https://github.com/RoboCup2D/tutorial/blob/master/sections/VoronoiDiagram.md).
 
-No método actionImpl() do [SamplePlayer](https://github.com/RoboCup2D/tutorial/blob/master/sections/SamplePlayer.md) (que é chamado a cada ciclo do jogo), a instância da classe FieldAnalyzer é chamada já na segunda linha. Antes dela, a chamada responsável pela estratégia de jogo também atualizada. (Mais detalhes, veja a classe [Strategy](https://github.com/RoboCup2D/tutorial/blob/master/sections/Strategy.md)).
+In the [SamplePlayer] actionImpl () method (https://github.com/RoboCup2D/tutorial/blob/master/sections/SamplePlayer.md) (which is called every cycle of the game), the instance of the FieldAnalyzer class is called Already in the second row. Before it, the call responsible for the game strategy also updated. (For more details, see the [Strategy] class (https://github.com/RoboCup2D/tutorial/blob/master/sections/Strategy.md)).
 
 ```cpp
 void
@@ -19,9 +19,9 @@ SamplePlayer::actionImpl()
 
    //[...]
 ```
-Antes da cadeia de ações ser gerada, o campo é analisado a cada ciclo. Note que nesse ponto, é muito importante que você tenha entendido o diagrama de Voronoi.
+Before the chain of actions is generated, the field is analyzed with each cycle. Note that at this point, it is very important that you have understood the Voronoi diagram.
 
-A chamada feita no SamplePlayer tem o seguinte código na classe FieldAnalyzer:
+The call made in the SamplePlayer has the following code in the FieldAnalyzer class:
 ```cpp
 void
 FieldAnalyzer::update( const WorldModel & wm )
@@ -54,5 +54,5 @@ FieldAnalyzer::update( const WorldModel & wm )
     writeDebugLog();
 #endif
 ```
-O trecho do código onde é chamado o método que, de fato, atualiza o diagrama de Voronoi vem comentado no código original do agent2D. **Testes precisam ser feitos para analisar o impacto desse método**. 
-Seguindo o resto da lógica, basicamente, esse método exclui algumas situações onde o diagrama não é atualizado, são elas início e retomada do jogo e nos seguintes modos de jogo: BeforeKickOff, AfterGoal_ e isPenaltyKickMode.
+The excerpt of the code where the method that actually updates the Voronoi diagram is called in the original agent2D code. ** Tests need to be done to analyze the impact of this method **.
+Following the rest of the logic, this method basically excludes some situations where the diagram is not updated, they are beginning and resuming of the game and in the following game modes: BeforeKickOff, AfterGoal_ and isPenaltyKickMode.

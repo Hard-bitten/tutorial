@@ -1,17 +1,15 @@
-O objetivo dessa classe é prever algumas variáveis do jogo em um estado específico de acordo com o modelo de mundo de um jogador.
+The purpose of this class is to predict some game variables in a specific state according to a player's world model.
 
-Por exemplo:
-- tudo relativo à bola (rcsc::ballObject)
-- tempo do jogo (rcsc::GameTime)
-- modo do jogo (rcsc::GameMode)
-- lado do campo (rcsc::SideID)
+For example:
+- all relative to the ball (rcsc :: ballObject)
+- Game Time (rcsc :: GameTime)
+- Game Mode (rcsc :: GameMode)
+- field side (rcsc :: SideID)
 
-Alguns métodos importantes:
+Some important methods:
 
 ```cpp
-const rcsc::AbstractPlayerObject * ballHolder() const  // verifica quem está com a bola, adversário ou
-                                                       // companheiro, e retorna a referência do jogador
-const rcsc::AbstractPlayerObject & self() const        // verifica se o jogador a ser interagido não é o
-                                                       // mesmo que está com a bola
+const rcsc::AbstractPlayerObject * ballHolder() const  // Checks who has the ball, opponent or teammate, and returns the player's reference
+const rcsc::AbstractPlayerObject & self() const        // Verifies that the player to be interacted is not the same one with the ball
 ```
 

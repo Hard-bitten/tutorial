@@ -1,4 +1,4 @@
-Instale o menconder:
+Install menconder:
 
 ```bash
 $ sudo apt-get install mencoder

@@ -1,17 +1,17 @@
-Classe que representa ações para serem tomadas em grupo por um agente.
+Class representing actions to be taken in group by an agent.
 
-As categorias de ações são:
+The categories of actions are:
 
-Hold - segurar a bola 
-Dribble - driblar o adversário 
-Pass - passar a bola para o companheiro de equipe 
-Shoot - chutar a bola em direção ao gol 
-Move - mover-se 
-NoAction - nenhuma ação 
+Hold - hold the ball
+Dribble - dribbling the opponent
+Pass - pass the ball to the teammate
+Shoot - kick the ball towards the goal
+Move - move
+NoAction - no action
 
-Basicamente, a classe possui métodos get e set para armazenar informações como número do jogador, categoria da ação, ponto final da ação, etc.
+Basically, the class has get and set methods to store information such as player number, action category, action end point, etc.
 
-A classe também possui uma struct simples e um método para comparar distâncias entre dois pontos. 
+The class also has a simple struct and a method for comparing distances between two points.
 
 ```cpp 
 DistCompare( const rcsc::Vector2D & pos )
@@ -24,6 +24,5 @@ DistCompare( const rcsc::Vector2D & pos )
               return lhs->targetPoint().dist2( pos_ ) < rhs->targetPoint().dist2( pos_ );
           }
 ```
-
-Operador () sobrecarregado para passar dois parâmetros shared_ptr do tipo da própria classe CooperativeAction.
-Esse função é usada para comparar duas instâncias da classe CooperativeAction e determinar qual é o maior ou menor valor das distâncias euclidianas entre o vector2D targetPoint (ponto final da ação) e o ponto passado como parâmetro no método-construtor DistCompare da struct de mesmo nome. (**Veja:** dist2 em [Vector2D](https://github.com/RoboCup2D/tutorial/blob/master/sections/Vector2D.md))
+Operator () overloaded to pass two shared_ptr parameters of the CooperativeAction class type itself.
+This function is used to compare two instances of the CooperativeAction class and determine which is the greater or lesser value of the Euclidean distances between the vector2D targetPoint and the point passed as a parameter in the DistCompare constructor method of the struct of the same name. (** See: ** dist2 in [Vector2D] (https://github.com/RoboCup2D/tutorial/blob/master/sections/Vector2D.md))

@@ -1,13 +1,13 @@
 **rcsc/geom/angle_deg.h**
 
-Classe que representa ângulos em graus. Como bem se sabe, as funções matemáticas presentes no ANSI C são apenas para radianos, portanto, o uso dessa classe é de extrema importância em diversos cálculos durante uma partida.
+A class that represents angles in degrees. As is well known, the mathematical functions present in ANSI C are for radians only, so the use of this class is extremely important in many calculations during a game.
 
 <br>
 <p align="center">
 <img src="https://raw.githubusercontent.com/robocup2d/robocup2d/master/images/polar_coordinate_system.png" widht="150" height="150" style:"align: center" />
 </p>
 
-Na imagem acima, se considerarmos o ponto _P_ como sendo _P(4, 3)_ logo teremos o valor do ângulo φ igual a:
+In the image above, if we consider the point _P_ to be _P (4, 3) we will then have the value of the angle φ equal to:
 ```matlab
 r² = 4² + 3²
 r = sqrt(25)
@@ -18,10 +18,10 @@ sin φ = 25 / 5
 φ ≃ 2.78 rad ou φ ≃ -55.59º
 ```
 
-Métodos úteis dessa classe:
+Useful methods of this class:
 ```cpp
-const AngleDeg & normalize()   // normaliza o ângulo no intervalo [-180º, 180º]
-double abs() const             // retorna o valor absoluto do ângulo
-double radian() const          // retorna o valor do ângulo em radianos
+const AngleDeg & normalize()   // normalize the angle in the interval [-180 °, 180 °]
+double abs() const             // returns the absolute value of the angle
+double radian() const          // returns the angle value in radians
 ```
-Essa classe possui muitos outros métodos úteis como cosseno, seno, tangente, arco-tangente, entre outros em graus e radianos, além de sobrecarga de operadores aritméticos, 
+This class has many other useful methods like cosine, sine, tangent, arc-tangent, among others in degrees and radians, in addition to arithmetic operators overhead,
