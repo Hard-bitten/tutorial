@@ -1,11 +1,11 @@
-Nessa seção é descrito o sistema de formação SBSP (*Situation Based Strategic Positioning* ou em português algo como Posicionamento Estratégico Baseado na Situação). Nesse SBSP, cada player agent não é considerado no movimento dos outros jogadores e para a posição-alvo do movimento é considerada como entrada somente a posição da bola. Isto é feito para apenas parecer que não é um posicionamento cooperativo, e sim como em uma coordenação aparentemente individual.
-O comportamento de posicionamento descrito nesta seção é algo próximo às habilidades individuais de cada player agent. No entanto, uma vez que são necessários ajustes em consideração ao equilíbrio de toda a equipe na implementação da operação, o que se segue aqui é uma parte da seção Desenvolvimento da Equipe.
+In this section the SBSP (Situation Based Strategic Positioning) training system is described, or something like Strategic Situation Based on Situation. In this SBSP, each player agent is not considered in the movement of the other players and for the target position of the movement is considered as input only the position of the ball. This is done to seem only that it is not a co-operative positioning, but rather as a seemingly individual co-ordination.
+The positioning behavior described in this section is something close to the individual abilities of each player agent. However, since adjustments are required in consideration of the entire team's balance in implementing the operation, what follows here is a part of the Team Development section.
 
-### Marcando o jogador adversário ###
+### Marking the opposing player ###
 
-A marcação próxima a um adversário específico é necessária quando o time está em seu campo de defesa. Obviamente, essa operação pode ser feita em outras situações, mas isso pode acarretar em um uso excessivo de stamina do jogador. Porém, isto necessariamente não leva à uma situação perigosa de jogo que poderia atrapalhar a formação do time. Estando no campo adversário e sem bola, uma marcação à distância já é suficiente.
-Com a posse de bola, uma marcação no campo de defesa pode trazer problemas ao tentar receber a bola em um passe; porém, no seu campo de ataque e estando sem a bola, isto será o objetivo principal desse comportamento. Para conseguir isto, mais do que marcar o adversário desejado é necessário mover-se próximo à posição da bola.
-Antes de decidir a posição-alvo do movimento de marcação, primeiro é necessário determinar qual jogador adversário será marcado. No código a seguir, decide-se qual jogador adversário será o candidato:
+Marking next to a specific opponent is required when the team is on its defensive field. Obviously, this operation can be done in other situations, but this can lead to excessive use of the player's stamina. However, this does not necessarily lead to a dangerous situation of play that could disrupt the formation of the team. In the opponent's field and without a ball, a distance marking is enough.
+With possession of a ball, a defense marking can cause problems in trying to receive the ball in a pass; However, in its field of attack and being without the ball, this will be the main objective of this behavior. In order to achieve this, more than marking the desired opponent it is necessary to move close to the position of the ball.
+Before deciding the target position of the marking move, it is first necessary to determine which opponent player will be scored. In the following code, it is decided which opponent player will be the candidate:
 
 ```cpp
 const PlayerObject * getMarkTarget( const WorldModel & wm, const Vector2D & home_pos ) 
@@ -30,10 +30,9 @@ const PlayerObject * getMarkTarget( const WorldModel & wm, const Vector2D & home
 	return opp;
 }
 ```
+The above code determines the position to which the player agent must perform the marking move on the opponent, which consequently becomes the target player.
 
-O código acima determina a posição para onde o player agent deve realizar o movimento de marcação sobre o adversário que, consequentemente, torna-se o jogador-alvo (target player).
-
-Obtendo-se um ponteiro para o PlayerObject do adversário no método getMarkTarget, uma última modificação na coordenada Y é necessária para retroceder sem precisar de nenhuma rotação extra. Aqui, utiliza-se o valor da posição Y do próprio agent player, mas você pode utilizar um valor fixo.
+By getting a pointer to the opponent's PlayerObject in the getMarkTarget method, a last modification in the Y coordinate is required to roll back without requiring any extra rotation. Here, the value of the Y position of the agent player itself is used, but you can use a fixed value.
 
 ```cpp
 AngleDeg block_angle = ( wm.ball().pos() - opp->pos() ).th();
@@ -45,15 +44,15 @@ if ( block_point.x < wm.self().pos().x - 1.5 ) {
 }
 ```
 
-No trecho de código acima, o objetivo é marcar o adversário próximo à home position do player agent. Numa visão mais abrangente onde se deseja um equilíbrio entre a função de cada jogador, a formação do time e os outros companheiros de equipe, seria necessária uma marcação mais complexa. Porém, em se tratando apenas de elaboração de regras, marcar o adversário parecer ser um tanto quanto difícil, particularmente, quando informações para identificação de outros jogadores são insuficientes. 
-Portanto, para conseguir um comportamento de marcação mais confiável, compartilhar informações através de comunicação entre os jogadores é essencial.
+In the code snippet above, the goal is to score the opponent close to the player agent's home position. In a more comprehensive view where a balance between the role of each player, the formation of the team and the other teammates, would require a more complex marking. However, when it comes to rule-making, it is difficult to mark the opponent as difficult, particularly when information for identifying other players is insufficient.
+Therefore, to achieve more reliable markup behavior, sharing information through communication between players is essential.
 
-### Bloquear a linha de passe  ###
+### Lock the pass line ###
 
-Bloquear a linha de passe é uma importante tática defensiva pois reduz-se as opções do time adversário. Porém, como o jogador que está com a bola toma a iniciativa da jogada, o path behaviour não permite que o path course seja bem bloqueado mesmo se um player agent com características bem balanceadas for utilizado para tentar o bloqueio. Além disso, como a bola se move rapidamente, nem sempre é necessário tentar bloquear a linha de passe pois será difícil acompanhar o movimento da bola. Consequentemente, semelhante ao comportamento de marcação, é melhor tentar bloquear a linha de passe em situações defensivas onde o time está em seu campo de defesa.
+Blocking the pass line is an important defensive tactic because it reduces the options of the opposing team. However, since the player with the ball takes the initiative, path behavior does not allow the path course to be blocked even if a player with well-balanced characteristics is used to attempt blocking. Also, as the ball moves quickly, it is not always necessary to try to block the pass line as it will be difficult to follow the movement of the ball. Consequently, similar to marking behavior, it is best to try to block the pass line in defensive situations where the team is in its defensive field.
 
 
-O código a seguir mostra como bloquear a linha de passe da frente do gol até a direção do escanteio.
+The following code shows how to lock the pass line from the front of the goal to the direction of the corner.
 
 ```cpp
 const BallObject & ball = agent->world().ball();
@@ -71,18 +70,18 @@ if ( ball.pos().y < 0.0 ) block_point.y *= -1.0;
 block_point.x = block_line.getX( block_point.y );
 ```
 
-No exemplo acima, o player agent foi designado a mover-se em uma linha reta estabelecida entre uma posição fixa na frente do centro do gol e a posição da bola. Á 10m da bola, a distância mínima do eixo Y é 15m da coordenada Y da posição de bloqueio (block_point). Note que a role do jogador deve adotar outras regras quando o valor da coordenada Y da posição da bola é 15m ou menos. A coordenada X pode ser calculada a partir da equação da reta e o valor da coordenada Y.
-Essa implementação não pode ser considerada ótima pois nela é usado um número mágico, assim como em implementações similares a esta.
+In the example above, the player agent was assigned to move in a straight line between a fixed position in front of the goal center and the position of the ball. At 10m from the ball, the minimum distance from the Y-axis is 15m from the Y-coordinate of the block_point. Note that the role of the player must adopt other rules when the value of the Y coordinate of the ball position is 15m or less. The X coordinate can be calculated from the equation of the line and the value of the Y coordinate.
+This implementation can not be considered optimal because it uses a magic number, as well as similar implementations.
 
-Se você deseja bloquear a linha de passe de jogadores adversários em particular, o player agent deve se mover na linha reta que conecta o adversário e a bola. Porém, a posição-alvo do movimento irá mudar durante os ciclos considerando que a bola e o adversário irão se mover.
-Durante o bloqueio, determinar se a posição do movimento é boa de uma forma fixa trará mais resultados do que apenas tentar bloquear uma linha reta qualquer do passe.
+If you wish to block the pass line of particular opponents, the player agent must move in the straight line that connects the opponent and the ball. However, the target position of the movement will change during the cycles considering that the ball and the opponent will move.
+During the lock, determining whether the position of the move is good in a fixed way will bring more results than just trying to block a straight line from any of the pass.
 
-### Marcação na frente do adversário ###
+### Marking in front of opponent ###
 
-Imagine uma situação onde o jogador adversário inica um drible. Você não pode simplesmente correr atrás dele e tentar roubar a bola executando um behaviour para interceptar o drible.
-Nesse caso, é necessário que haja uma marcação na frente do adversário.
+Imagine a situation where the opposing player initiates a dribble. You can not just run after him and try to steal the ball by performing a behavior to intercept the dribble.
+In this case, there must be a marking in front of the opponent.
 
-Segue o código: 
+Follow the code:
 
 ```cpp
 const WorldModel & wm = agent->world();
@@ -109,16 +108,16 @@ Body_GoToPoint( block_point,
 ).execute( agent );
 ```
 
-Você deve estar imaginando que o código acima para obter a posição-alvo é bem simples. De fato, é bem simples. Contudo, a intenção não é ir exatamente no ponto onde previu-se o movimento do jogador adversário. 
-Além do mais, o código acima pode resultar em rotações desnecessárias quando elaborado apenas para um ponto. Para resolver isto, basta atribuir um valor de erro maior no método BodyGoToPoint. Como resultado, é possível reduzir as rotações desnecessárias apenas mudando um pouco a direção da posição-alvo.
+You must be imagining that the code above to get the target position is pretty simple. In fact, it's quite simple. However, the intention is not to go exactly at the point where the opponent's movement was predicted.
+What's more, the above code can result in unnecessary rotations when drawn to just one point. To resolve this, simply assign a larger error value in the BodyGoToPoint method. As a result, you can reduce unnecessary rotations by only slightly changing the direction of the target position.
 
-Prever o comportamento do adversário pode ser mais eficaz quando executado pelos jogadores ofensivos.
+Predicting opponent behavior can be more effective when executed by offensive players.
 
-### Movimento para cancelar a marcação ###
+### Movement to cancel the dialing ###
 
-1. Busca dinâmica
+1. Dynamic search
 
-Existem vários métodos para calcular o campo potencial como uma forma de mudar a posição do movimento. O código a seguir obtém a densidade do jogador em uma certa posição.
+There are several methods for calculating the potential field as a way of changing the position of the motion. The following code gets the density of the player in a certain position.
 
 
 ```cpp
@@ -131,13 +130,13 @@ for ( PlayerPtrCont::const_iterator o = agent->world().getOpponentsFromSelf().be
 }
 ```
 
-No exemplo acima, é obtida a densidade de congestão dos jogadores adversários em um ponto específico (target_point). A posição que o valor da congestão possui é minimizado de acordo com o cálculo de várias coordenadas de posições medidas a partir do target_point.
+In the above example, the congestion density of the opposing players is obtained at a specific point (target_point). The position that the congestion value has is minimized according to the calculation of several position coordinates measured from the target_point.
 
-Tudo parece ótimo nessa algoritmo, mas não funciona nesse caso. O campo de visão do player agent é limitado e desde que cada jogador está se movendo, as posições-alvo (target position) dos jogadores adversários estão constantemente mudando. Nesse caso, operações de rotaçãoes incluíram vários movimentos do player agent e isto não seria nada eficiente.
+Everything looks great on this algorithm, but it does not work in that case. The field of view of the player agent is limited and since each player is moving, the target positions of the opposing players are constantly changing. In this case, rotation operations included several player agent moves and this would not be efficient at all.
 
-Uma solução para isto é registrar a intenção de movimento do tempo limite em uma forma que continue a realizar operações de movimentação para a posição, assim em um certo período de tempo você pode decidir qual target position será escolhida de acordo com o tempo considerado.
+One solution to this is to record the intention to move the timeout in a way that continues to perform move operations to the position, so in a certain period of time you can decide which target position will be chosen according to the time considered.
 
-No entanto, mesmo reduzindo movimentos utilizando intention, mudanças dinâmicas da posição-alvo que está em movimento parece não surtir muito efeito. Se você deseja um efeito mais confiável, é melhor usar um método que incorpore regras estáticas que serão descritos abaixo.
+However, even by reducing movements using intention, dynamic changes of the target position that is in motion does not seem to have much effect. If you want a more reliable effect, it is best to use a method that incorporates static rules that will be described below.
 
 
 ```cpp
@@ -164,8 +163,8 @@ if ( wm.ball().pos().y * wm.self().pos().y < 0.0 && wm.ball().pos().x > 40.0
 }
 ```
 
-Você também pode realizar a operação para cancelar a marcação através de regras de posicionamento fixo. Desta forma, é possível determinar a posição fixa do target point. Para ser mais preciso, isto não é um posicionamento dinâmico, isto é um posicionamento tático para uma situação local, como será explicado na mais detalhadamente na próxima seção.
-Por exemplo, no caso da role ForwardSide, o que você deve fazer é passar para a frente do gol para marcar o adversário de frente como mostrado no código a seguir.
+You can also perform the operation to cancel the markup via fixed positioning rules. In this way, it is possible to determine the fixed position of the target point. To be more precise, this is not a dynamic positioning, this is a tactical positioning for a local situation, as will be explained in more detail in the next section.
+For example, in the case of the ForwardSide role, what you should do is move to the front of the goal to score the opponent forward as shown in the following code.
 
 ```cpp
 const WorldModel & wm = agent->world();
@@ -189,10 +188,10 @@ if ( wm.ball().pos().y * wm.self().pos().y < 0.0 && wm.ball().pos().x > 40.0
 }
 ```
 
-### Ajuste da orientação do corpo do player agent ###
+### Player agent body orientation adjustment ###
 
-A melhor ideia durante o jogo é ajustar a orientação do corpo mesmo quando não há ação a ser feita, em particular, quando o jogador já atingiu a posição final do seu movimento.
-Para um jogador ofensivo, é suficiente apenas rodar o corpo para a direção da linha de gol adversário. Isso pode ser facilmente obtido com o código a seguir:
+The best idea during the game is to adjust the orientation of the body even when there is no action to be taken, particularly when the player has already reached the final position of his movement.
+For an offensive player, it is enough to just turn the body towards the direction of the opponent's goal line. This can be easily obtained with the following code:
 
 ```cpp
 if ( ! Body_GoToPoint( target_point, dist_thr, dash_power).execute( agent ) ) {
@@ -200,7 +199,7 @@ if ( ! Body_GoToPoint( target_point, dist_thr, dash_power).execute( agent ) ) {
     Body_TurnToPoint( face_point ).execute( agent );
 }
 ```
-Além disso, é útil ajustar a posição através do rear dash sem precisar mudar a orientação do corpo quando um jogador com role de marcação mais agressiva tiver que se mover continuamente para a target position.
+In addition, it is useful to adjust the position through the rear dash without having to change the orientation of the body when a player with a more aggressive marking role has to move continuously to the target position.
 
 ```cpp
 if ( wm.self().pos().x > target_point.x + dist_thr*0.5 
@@ -211,7 +210,7 @@ if ( wm.self().pos().x > target_point.x + dist_thr*0.5
 }
 ```
 
-Para um jogador com role defensiva, é necessário elaborar quase que um "comportamento racional" de interceptação. Por exemplo, no caso de uma role que faz uma linha defensiva a interceptação, considerando que é necessário o movimento que interfira o curso de movimento do jogador adversário de lado a lado, é mostrado no código a seguir: 
+For a player with a defensive role, it is necessary to elaborate almost a "rational behavior" of interception. For example, in the case of a role that makes a defensive line the interception, considering that it is necessary the movement that interferes the course of movement of the opponent player side by side, is shown in the following code:
 
 ```cpp
 if ( ! Body_GoToPoint( target_point, dist_thr, dash_power ).execute( agent ) ) {
@@ -221,7 +220,7 @@ if ( ! Body_GoToPoint( target_point, dist_thr, dash_power ).execute( agent ) ) {
 }
 ```
 
-Além disso, você precisará armazenar a direção perpendicular do corpo do player agent em relação à bola de modo que ficar fácil de lidar caso ela seja chutada de repente:
+In addition, you will need to store the perpendicular direction of the body of the player agent relative to the ball so that it will be easy to handle if it is suddenly kicked:
 
 ```cpp
 
@@ -237,4 +236,4 @@ if ( ! Body_GoToPoint( target_point, dist_thr, dash_power ).execute( agent ) ) {
 }
 ```
 
-Porém, você deve verificar a posição da bola em qualquer caso. Assim, a operação para ajustar a orientação do corpo deve ser executada somente quando for possível confirmar a posição da bola.
+However, you should check the position of the ball in any case. Thus, the operation to adjust the orientation of the body must be performed only when it is possible to confirm the position of the ball.
